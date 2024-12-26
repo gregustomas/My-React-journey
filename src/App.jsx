@@ -1,26 +1,31 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import { Navbar } from './Components/Navbar'
-import { Routes, Route } from 'react-router'
-import { Home } from './Routes/Home'
-import { About } from './Routes/about'
-import { Contact } from './Routes/Contact'
-import { Products } from './Routes/Products'
+import { useState } from 'react';
+import { WorkoutList } from './Components/WorkoutList';
+import { Routes, Route } from 'react-router-dom';
+import { CreateWorkout } from './Components/CreateWorkout';
+import { Navbar } from './Components/Navbar';
+import { WorkoutContext } from './Contexts/WorkoutsContext';
+import { WorkoutDetails } from './Components/WorkoutDetails';
 
 function App() {
+  const [name, setName] = useState();
+  const [workouts, setWorkouts] = useState([]);
+  function HandleAddWorkout() {
+    setWorkouts(w => [...w, name]);
+  }
 
   return (
     <>
-      <Navbar></Navbar>
-      <Routes>
-        <Route path='/' element={<Home/>}/>
-        <Route path='/about' element={<About/>}/>
-        <Route path='/contact' element={<Contact/>}/>
-        <Route path='/products' element={<Products/>}/>
-      </Routes>
+      <Navbar />
+      <WorkoutContext.Provider value={{ name, setName, workouts, setWorkouts, HandleAddWorkout }}>
+        <Routes>
+          <Route path='/CreateWorkout' element={<CreateWorkout />} />
+          <Route path='/WorkoutList' element={<WorkoutList />} />
+          <Route path='/WorkoutList/:workoutName' element={<WorkoutDetails />} />
+        </Routes>
+      </WorkoutContext.Provider>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
+
